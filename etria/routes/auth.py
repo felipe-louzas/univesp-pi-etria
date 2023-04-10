@@ -39,6 +39,8 @@ def recover():
 @routes.route('/verify')
 @login_required
 def verify():
+    if current_user.email_verified:
+        return redirect(url_for('routes.atendimentos.home'))
     return render_template('auth/verify.html', email=current_user.email)
 
 

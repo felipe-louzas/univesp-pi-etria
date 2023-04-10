@@ -1,0 +1,17 @@
+{% macro textInput(name, label, type="text", required = false, value='') -%}
+<div class="form-group mt-2">
+    <label for="{{ name }}_input" class="form-label">{{ label }}:</label>
+    
+    <input 
+        id="{{ name }}_input" 
+        type="{{ type }}" 
+        name="{{ name }}" 
+        class="form-control" 
+        {% if required %}
+        required="required"
+        {% endif %}
+        autocomplete="no"
+        value="{{ value }}"
+    />
+</div>
+{%- endmacro %}

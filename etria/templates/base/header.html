@@ -1,0 +1,67 @@
+{% macro navItem(text, route) -%}
+<li class="nav-item">
+    <a class="nav-link px-3 {% if request.endpoint == 'routes.'+route %}active{% endif %}"
+        href="{{ url_for('routes.' + route) }}">{{ text }}</a>
+</li>
+{%- endmacro %}
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container flex-nowrap">
+        <!-- First Line -->
+        <a class="navbar-brand" href="{{ url_for('routes.index') }}">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar"
+            aria-controls="navbarnavbar" aria-expanded="false" aria-label="Exibir menu de navegação">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        {% if current_user.is_authenticated %}
+        <div class="navbar-collapse collapse justify-content-end">
+            <!-- User menu -->
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <!-- FontAwsome user icon -->
+                    <i class="fas fa-user me-2"></i>
+                    {{ current_user.first_name }}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="{{ url_for('routes.profile.home') }}">Meu cadastro</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('routes.auth.logout') }}">Sair</a></li>
+                </ul>
+            </div>
+        </div>
+        {% else %}
+        <div class="navbar-collapse collapse justify-content-end">
+            <a href="{{ url_for('routes.auth.login') }}" class="btn btn-outline-secondary me-2" type="button">Entrar</a>
+            <a href="{{ url_for('routes.auth.cadastro') }}" class="btn btn-primary" type="button">Cadastre-se</a>
+        </div>
+        {% endif %}
+    </div>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary p-0 mb-4">
+    <div class="container">
+        <div class="offcanvas offcanvas-end bg-primary" id="navbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header text-light">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Navegação</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                    aria-label="Fechar"></button>
+            </div>
+            <div class="offcanvas-body p-0">
+                <ul class="navbar-nav flex-grow-1 fs-5">
+                    {% if current_user.is_authenticated %}
+
+                    {{ navItem('Animais', 'animais.home') }}
+                    {{ navItem('Atendimentos', 'atendimentos.home') }}
+
+                    {% else %}
+
+                    {{ navItem('Início', 'index') }}
+                    
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

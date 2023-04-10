@@ -1,0 +1,6 @@
+css-all:
+    filters: libsass
+    output: css/styles.gen.css
+    depends: assets/scss/*
+    contents:
+        - assets/scss/main.scss

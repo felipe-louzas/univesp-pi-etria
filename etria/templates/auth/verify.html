@@ -1,0 +1,45 @@
+{% extends "base/base.html" %}
+
+{% import 'components/base.html' as ui %}
+
+{% block title %}Verificar e-mail{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12 col-md-8 col-lg-6 col-xl-5 card mx-auto bg-light">
+        <div class="card-body">
+
+            <div class="text-center pb-3 border-bottom mb-4">
+                <h3>Verificar e-mail</h3>
+            </div>
+
+            {{ ui.flashed_messages() }}
+
+            <div>
+                <p>
+                    Enviamos uma mensagem com um link de verificação para <strong>{{ email }}</strong>.
+                </p>
+                <p>
+                    Por favor, verifique sua caixa de entrada e clique no link para confirmar seu endereço de e-mail.
+                </p>
+                <p>
+                    Se você não encontrar a mensagem mesmo após verificar sua caixa de spam, clique no botão abaixo para
+                    reenviar.
+                </p>
+            </div>
+
+            <form action="{{ url_for('routes.auth.verify') }}" method="POST">
+                <input type="hidden" name="action" value="resend">
+
+                <div class="text-center mb-1 pt-4 d-flex">
+                    <button type="submit" class="btn btn-primary flex-fill">Reenviar mensagem</button>
+                </div>
+            </form>
+
+            <div class="text-center small mt-4 pt-3 border-top">
+                <a href="{{ url_for('routes.auth.update_email') }}">E-mail está errado? Clique aqui para alterar.</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

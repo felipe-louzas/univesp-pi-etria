@@ -2,6 +2,12 @@
 ### Projeto Integrador I
 Univesp - Polo São Caetano do Sul - Grupo 003
 
+#### Demonstração
+
+Para acessar a demonstração da solução [acesse este link](http://etria.magesti.com.br).
+
+#### Descrição
+
 A solução proposta é uma plataforma de coleta de dados de triagem e anamnese que permitirá aos veterinários reduzir o tempo gasto na obtenção de informações e ajudar a construir, manter e aprimorar uma base de conhecimento por meio da análise de dados sobre sintomas e possíveis diagnósticos a partir das informações fornecidas pelos tutores através de uma plataforma web.
 
 Essa plataforma foi criada para oferecer uma maneira mais eficiente e completa de coletar informações relevantes sobre animais de estimação. Os veterinários poderão utilizar a plataforma para fazer perguntas específicas aos tutores, com o objetivo de obter informações detalhadas sobre a condição de saúde do animal. As informações coletadas serão armazenadas de forma segura em um banco de dados acessível apenas aos profissionais de saúde envolvidos no tratamento do animal.

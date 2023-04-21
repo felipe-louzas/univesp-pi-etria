@@ -1,0 +1,332 @@
+// Use DBML to define your database structure
+// Docs: https://www.dbml.org/docs
+
+Table Usuarios {
+  id integer [pk]
+  email varchar
+  email_verified varchar
+  password varchar [note: 'SHA256 hash']
+  first_name varchar
+  last_name varchar
+  active boolean
+}
+
+Table Cursos {
+  id integer [pk]
+  nome varchar
+}
+
+Table MembrosEquipe {
+  id integer [pk]
+  usuario_id integer [ref: - Usuarios.id]
+  curso_id integer [ref: > Cursos.id]
+  cargo_type integer
+}
+
+Table Tutores {
+  id integer [pk]
+  usuario_id integer [ref: - Usuarios.id]
+  rg varchar
+  cpf varchar
+  identidade_doc_id integer [ref: > Documentos.id]
+  comp_endereco_doc_id integer [ref: > Documentos.id]
+  comp_renda_doc_id integer [ref: > Documentos.id]
+  contato_id integer [ref: - Contatos.id]
+}
+
+Table Animais {
+  id integer [pk]
+  tutor_id integer [ref: > Tutores.id]
+  nome varchar
+  especie varchar
+  raca varchar
+  idade integer
+  idade_type char
+  idade_last_update datetime
+  sexo char
+  cor_pelagem varchar
+  procedencia varchar
+}
+
+Table Vacinas {
+  id integer [pk]
+  nome varchar
+  vacina_type varchar
+}
+
+Table EventosVacina {
+  id integer [pk]
+  animal_id integer [ref: > Animais.id]
+  vacina_id integer [ref: > Vacinas.id]
+  data_aplicaceo date
+  observacoes text
+  cadastrado_em datetime
+  removido_em datetime
+}
+
+Table EventosReproducao {
+  id integer [pk]
+  animal_id integer [ref: > Animais.id]
+  event_type varchar
+  data_evento date
+  observacoes text
+  cadastrado_em datetime
+  removido_em datetime
+}
+
+Table EventosConvivio {
+  id integer [pk]
+  animal_id integer [ref: > Animais.id]
+  sibling_id integer [null, ref: > Animais.id]
+  especie_type varchar
+  descricao varchar
+  data_inicio date
+  data_fim date  
+  observacoes text
+  cadastrado_em datetime
+  removido_em datetime
+}
+
+Table EventosDiagnosticos {
+  id integer [pk]
+  animal_id integer [ref: > Animais.id]
+  data_diagnostico date
+  diagnostico_id integer [ref: > Diagnosticos.id]
+  observacoes text
+  cadastrado_em datetime
+  removido_em datetime
+}
+
+Table EventosTratamentos {
+  id integer [pk]
+  animal_id integer [ref: > Animais.id]
+  diagnostico_id integer [null, ref: > EventosDiagnosticos.id]
+  tratamento_id integer [ref: > Prescricoes.id]
+  data_tratamento date
+  dosagem integer
+  dosagem_type varchar
+  duracao integer
+  duracao_type char
+  resposta_type varchar
+  observacoes text
+  cadastrado_em datetime
+  removido_em datetime
+}
+
+Table HistoricoAlimentacao {
+  id integer [pk]
+  animal_id integer [ref: > Animais.id]
+  data_historico date
+  last_update boolean
+  alimentaco_type varchar
+  marca varchar
+  frequecia integer
+  orientacao_vet boolean
+  observacoes text
+  cadastrado_em datetime  
+  removido_em datetime  
+}
+
+Table HistoricoDomicilio {
+  id integer [pk]
+  animal_id integer [ref: > Animais.id]
+  data_historico date
+  last_update boolean
+  domicilio_cat varchar
+  domicilio_type varchar
+  observacoes text
+  cadastrado_em datetime  
+  removido_em datetime  
+}
+
+// Atendimentos / Agendamento
+
+Table Atendimentos {
+  id integer [pk]
+  tutor_id integer [ref: > Tutores.id]
+  animal_id integer [ref: > Animais.id]
+  atend_type integer
+  situacao integer
+  data_solicitacao datetime
+  data_agendamento datetime
+  discente_id integer [ref: > MembrosEquipe.id]
+  vet_resp_id integer [ref: > MembrosEquipe.id]
+  retorno_ind integer [null, note: "0 = Em caso de piora ou recidiva, ou numero de semanas"]
+  retorno_atend_id integer [ref: > Atendimentos.id]
+}
+
+// Anamnese / Histórico
+
+Table Anamneses {
+  atendimento_id integer [pk, ref: - Atendimentos.id]
+  peso integer
+}
+
+Table SintomasCategory {
+  id integer [pk]
+  descricao varchar
+}
+
+Table Sintomas {
+  id integer [pk]
+  category_id integer [ref: > SintomasCategory.id ]
+  name varchar
+  descricao varchar
+}
+
+Table AnamneseSintomas {
+  id integer [pk]
+  atendimento_id integer [ref: > Atendimentos.id]
+  sintoma_id integer [ref: > Sintomas.id]
+  frequencia_type varchar
+  duracao integer
+  duracao_type char
+  similar_contato_type varchar
+  observacoes text
+}
+
+Table AnamneseTratamentos {
+  atendimento_id integer [pk, ref: > Atendimentos.id]
+  tratamento_id integer [pk, ref: > EventosTratamentos.id]
+}
+
+
+// Exames físicos
+
+Table Exames {
+  id integer [pk]
+  exame_type varchar
+  nome varchar
+  descricao text
+  incluir_auto boolean
+}
+
+Table ExamesObservacoes {
+  id integer [pk]
+  exame_id integer [ref: > Exames.id]
+  nome varchar
+  descricao text
+  resultado_type varchar [note: "Measurement, List, Boolean, Text"]
+  resultado_scale varchar
+  ref_min integer
+  ref_max integer
+  ref_ind boolean
+  incluir_auto boolean
+}
+
+Table ObservacoesOpcoes {
+  id integer [pk]
+  obs_id integer [ref: > ExamesObservacoes.id]
+  resultado varchar
+  ind_ref boolean
+  descricao_template text
+}
+
+Table ExamesResultados {
+  id integer [pk]
+  atendimento_id integer [ref: > Atendimentos.id]
+  exame_id integer [ref: > Exames.id]
+  resp_id integer [ref: > MembrosEquipe.id]
+  descricao text
+}
+
+Table ObservacoesResultados {
+  resultado_id integer [pk, ref: > ExamesResultados.id]
+  obs_id integer [pk, ref: > ExamesObservacoes.id]
+  resultado varchar
+  descricao text
+}
+
+
+// Conclusão atendimento
+
+Table Diagnosticos {
+  id integer [pk]
+  name varchar
+  descricao text
+}
+
+Table Prescricoes {
+  id integer [pk]
+  prescricao_type varchar [note: "Exame, Medicamento, Cirurgia, Geral"]
+  name varchar
+  encaminhamento boolean
+  especialidade_id integer [ref: > Especialidades.id]
+  template text
+  active boolean
+}
+
+Table PrescricoesPadrao {
+  diagnostico_id integer [pk, ref: > Diagnosticos.id]
+  prescricao_id integer [pk, ref: > Prescricoes.id]
+  diagnostico_type varchar [null, note: "Suspeita clínica, Diagnóstico diferencial"]
+}
+
+Table ConclusaoDiagnosticos {
+  atendimento_id integer [pk, ref: > Atendimentos.id]
+  diagnostico_id integer [pk, ref: > Diagnosticos.id]
+  diagnostico_type varchar [note: "Suspeita clínica, Diagnóstico diferencial"]
+  observacoes text
+}
+
+Table ConclusaoPrescricoes {
+  atendimento_id integer [pk, ref: > Atendimentos.id]
+  prescricao_id integer [pk, ref: > Prescricoes.id]
+  dosagem integer
+  dosagem_type varchar
+  duracao integer
+  duracao_type varchar
+  encaminhamento_id integer [ref: > Encaminhamentos.id]
+  observacoes text
+}
+
+
+// Encaminhamentos 
+
+Table Especialidades {
+  id integer [pk]
+  name varchar
+  abre_agendamento boolean
+}
+
+Table Encaminhamentos {
+  id integer [pk]
+  especialidade_id integer [ref: > Especialidades.id]
+  agendamento_id integer [ref: > Atendimentos.id]
+  observacoes text
+}
+
+Table EspecialidadesIndicacoes {
+  especialidade_id integer [pk, ref: > Especialidades.id]
+  contato_id integer [pk, ref: > Contatos.id]
+}
+
+Table Contatos {
+  id integer [pk]
+  nome varchar
+  nome_resp varchar
+  telefone1 varchar
+  telefone2 varchar
+  logradouro varchar
+  numero varchar
+  complemento varchar
+  bairro varchar
+  cidade varchar
+  uf varchar
+  cep varchar
+  email varchar
+  site varchar
+  observacoes text
+}
+
+// Outros
+
+Table Documentos {
+  id integer [pk]
+  filename varchar
+  uploaded_at datetime
+  removed_at datetime
+  filesize integer
+  preview blob
+}
+

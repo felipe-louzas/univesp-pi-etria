@@ -8,7 +8,10 @@ from etria import create_app
 from etria.database import database
 
 if __name__ == '__main__':
-    os.remove('instance/db.sqlite')
+    try:
+        os.remove('instance/db.sqlite')
+    except OSError:
+        pass
 
     app = create_app()
     with app.app_context():

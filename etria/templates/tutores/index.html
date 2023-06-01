@@ -31,9 +31,9 @@
                 <tr>
                     <td class="align-middle">{{ tutor.usuario.first_name }} {{ tutor.usuario.last_name }}</td>
                     <td class="align-middle">{{ tutor.usuario.email }}</td>
-                    <td class="align-middle">{{ tutor.contato.logradouro }}, {{ tutor.contato.numero }}
-                        {{ tutor.contato.complemento }}</td>
-                    <td class="align-middle">{{ tutor.contato.cidade }}/{{ tutor.contato.uf }}</td>
+                    <td class="align-middle">{% if tutor.atualizado_em %}{{ tutor.contato.logradouro }}, {{ tutor.contato.numero }}
+                        {{ tutor.contato.complemento }}{% endif %}</td>
+                    <td class="align-middle">{% if tutor.atualizado_em %}{{ tutor.contato.cidade }}/{{ tutor.contato.uf }}{% endif %}</td>
                     <td class="align-middle" data-inputmask="'alias': 'cpf'">{{ tutor.cpf }}</td>
                     <td class="align-middle" data-inputmask="'alias': 'rg'">{{ tutor.rg }}</td>
                     <td class="align-middle" class="text-center">
@@ -42,15 +42,19 @@
                         {{ ui.docLink(tutor.comp_renda_doc_id, 'hand-holding-dollar') }}
                     </td>
                     <td class="align-middle">
-                        {% if tutor.atualizado_em and not tutor.aprovado_em %}
-                        <form action="{{ url_for('routes.tutores.aprovar', tutor_id=tutor.id) }}" method="post">
-                            <button type="sumbit" class="btn btn-success btn-sm">
-                                <i class="fas fa-check"></i>
-                                Aprovar
-                            </button>
-                        </form>
+                        {% if tutor.atualizado_em %}
+                            {% if tutor.aprovado_em %}
+                            <span class="badge bg-success-subtle text-dark">Aprovado</span>
+                            {% else %}
+                            <form action="{{ url_for('routes.tutores.aprovar', tutor_id=tutor.id) }}" method="post">
+                                <button type="sumbit" class="btn btn-success btn-sm">
+                                    <i class="fas fa-check"></i>
+                                    Aprovar
+                                </button>
+                            </form>
+                            {% endif %}
                         {% else %}
-                        <span class="badge bg-success-subtle text-dark">Aprovado</span>
+                            <span class="badge bg-warning-subtle text-dark">Pendente</span>
                         {% endif %}
                     </td>
                 </tr>

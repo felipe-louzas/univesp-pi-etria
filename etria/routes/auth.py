@@ -137,6 +137,7 @@ def cadastro_post():
         email=email,
         password=generate_password_hash(password, method='sha256'),
         email_verified=False,
+        tipo_cadastro = 'T'
     )
     db.session.add(new_user)
 

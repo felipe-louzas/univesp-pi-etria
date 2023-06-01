@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
-    "bootstrap": "^5.2.3"
+    "bootstrap": "^5.3.0",
+    "inputmask": "^5.0.9-beta.10"
   }
 }

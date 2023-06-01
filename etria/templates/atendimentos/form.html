@@ -1,0 +1,163 @@
+{% extends "base/base.html" %}
+
+{% import 'components/base.html' as ui %}
+{% import 'components/forms.html' as forms %}
+
+{% block title %}Agendar atendimento{% endblock %}
+
+{% block content %}
+<div class="mt-4 mb-5">
+    {{ ui.flashed_messages() }}
+
+    {% if model.atendimento.id %}
+        <h3>Solicitação de atendimento</h3>
+    {% else %}
+        <h3>Nova solicitação de atendimento</h3>
+    {% endif %}
+    
+
+    <!-- Formulário de anamnese para agendamento do atendimento -->
+    
+    <div class="mt-4">
+        <form action="{{ url_for('routes.atendimentos.save') }}" method="POST" enctype="multipart/form-data">
+            {% if model.atendimento.id %}
+                <input type="hidden" name="id" value="{{ model.atendimento.id }}"/>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-12">
+                    {{ forms.selectInput(name="animal_id", label="Nome do animal", required=true, value=model.atendimento.animal_id, options=model.animais) }}
+                </div>
+            </div>
+
+            <hr class="mt-4"/>
+
+            <h5 class="mt-4">Anamnese</h5>
+
+            <div class="row">
+                <div class="col-12">
+                    {{ forms.textArea(name="queixa_principal", label="Descreva a queixa principal, estado geral, sintomas, histórico clínico e evolução", value=model.anamnese.get('queixa_principal'), required=true) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    {{ forms.textInput(name="apetite", label="Apetite", value=model.anamnese.get('apetite'), required=true) }}
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    {{ forms.textInput(name="disposicao", label="Disposicao", value=model.anamnese.get('disposicao'), required=true) }}
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    {{ forms.textInput(name="fezes", label="Fezes / Urina", value=model.anamnese.get('fezes'), required=true) }}
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    {{ forms.textInput(name="tratamentos", label="Tratamentos anteriores", value=model.anamnese.get('tratamentos'), required=true) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.radioInput(name="tosse", label="Tosse", required=true, value=model.anamnese.get('tosse'), options={'S': 'Sim', 'N': 'Não'}) }}
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.radioInput(name="espirros", label="Espirros", required=true, value=model.anamnese.get('espirros'), options={'S': 'Sim', 'N': 'Não'}) }}
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.radioInput(name="vomito", label="Vômito", required=true, value=model.anamnese.get('vomito'), options={'S': 'Sim', 'N': 'Não'}) }}
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.radioInput(name="diarreia", label="Diarreia", required=true, value=model.anamnese.get('diarreia'), options={'S': 'Sim', 'N': 'Não'}) }}
+                </div>
+            </div>
+
+            <h5 class="mt-4">Histórico</h5>
+
+            <div class="row">
+                <div class="col-12">
+                    {{ forms.textArea(name="historico", label="Doenças ou cirurgias anteriores", value=model.anamnese.get('historico'), required=true) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    {{ forms.textInput(name="reproducao", label="Vida reprodutiva", value=model.anamnese.get('reproducao'), required=true) }}
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    {{ forms.textInput(name="alimentação", label="Alimentação habitual", value=model.anamnese.get('alimentação'), required=true) }}
+                </div>
+            </div>
+            
+            <h5 class="mt-4">Habitação</h5>
+
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.selectInput(name="habito", label="Tipo", required=true, value=model.anamnese.get('habito'), options={'Domiciliado': 'Domiciliado', 'Semi-domiciliado':'Semi-domiciliado', 'Não-domiciliado': 'Não-domiciliado'}) }}
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.textInput(name="habito_obs", label="Descrição", value=model.anamnese.get('habito_obs'), required=true) }}
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.radioInput(name="convivio", label="Convive com outros animais", required=true, value=model.anamnese.get('convivio'), options={'S': 'Sim', 'N': 'Não'}) }}
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.textInput(name="convivio_qtd", label="Quantos?", required=true, value=model.anamnese.get('convivio_qtd'), mask='numeric') }}
+                </div>
+            </div>
+
+            <h5 class="mt-4">Vacinas</h5>
+
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.textInput(name="polivalente", label="Vacina polivalente", value=model.anamnese.get('polivalente'), required=true) }}
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.textInput(name="poli_ult_dose", label="Última dose", value=model.anamnese.get('poli_ult_dose'), required=true, mask='date') }}
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.textInput(name="antirabica", label="Vacina antirábica", value=model.anamnese.get('antirabica'), required=true) }}
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.textInput(name="rabi_ult_dose", label="Última dose", value=model.anamnese.get('rabi_ult_dose'), required=true, mask='date') }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.textInput(name="vermifugacao", label="Vermifugação", value=model.anamnese.get('vermifugacao'), required=true) }}
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.textInput(name="vermif_ult_dose", label="Última dose", value=model.anamnese.get('vermif_ult_dose'), required=true, mask='date') }}
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    {{ forms.textInput(name="parasitas", label="Controle de ectoparasitas e vetores", value=model.anamnese.get('parasitas'), required=true) }}
+                </div>
+            </div>
+
+
+
+            <!-- Submit button -->
+
+            <div class="row mt-4 justify-content-end">
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">
+                        {% if model.atendimento.id %}
+                        <i class="fas fa-save me-1"></i> Salvar alterações
+                        {% else %}
+                        <i class="fas fa-paper-plane me-1"></i> Enviar solicitação
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+
+
+
+        </form>
+    </div>
+
+</div>
+{% endblock %}

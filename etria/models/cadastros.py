@@ -8,20 +8,26 @@ class Cursos(db.Model):
 
 class MembrosEquipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    usuario_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    usuario_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     curso_id = db.Column(db.Integer, db.ForeignKey('cursos.id'))
-    cargo_type = db.Column(db.String(32))
+    cargo_type = db.Column(db.String(32))  # ADMIN, VETERINARIO, ASSISTENTE
 
 
 class Tutores(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    usuario_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    usuario_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     rg = db.Column(db.String(15))
     cpf = db.Column(db.String(11))
     identidade_doc_id = db.Column(db.Integer, db.ForeignKey('documentos.id'))
     comp_endereco_doc_id = db.Column(db.Integer, db.ForeignKey('documentos.id'))
     comp_renda_doc_id = db.Column(db.Integer, db.ForeignKey('documentos.id'))
-    contato_id = db.Column(db.Integer, db.ForeignKey('contatos.id'))
+    contato_id = db.Column(db.Integer, db.ForeignKey('contatos.id'), nullable=False)
+    atualizado_em = db.Column(db.DateTime)
+    aprovado_em = db.Column(db.DateTime)
+    aprovado_por = db.Column(db.Integer, db.ForeignKey('membros_equipe.id'))
+
+    usuario = db.relationship('User')
+    contato = db.relationship('Contatos')
 
 
 class Animais(db.Model):

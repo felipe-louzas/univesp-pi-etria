@@ -1,0 +1,287 @@
+{% extends "base/base.html" %}
+
+{% import 'components/base.html' as ui %}
+{% import 'components/forms.html' as forms %}
+
+{% block title %}Agendar atendimento{% endblock %}
+
+{% block content %}
+<div class="mt-4 mb-5">
+    {{ ui.flashed_messages() }}
+
+    <h3>Solicitação de atendimento</h3>
+    {% if model.atendimento.situacao == 'S' %}
+    <p><small><span class="badge bg-warning text-dark">Agendamento pendente</span></small></p>
+    {% endif %}
+
+    {% if model.atendimento.situacao == 'A' %}
+    <p><small><span class="badge bg-success">Agendado para
+                {{ model.atendimento.data_agendamento.strftime('%d/%m/%Y %H:%M') }}</span></small></p>
+    {% endif %}
+
+    {% if model.atendimento.situacao == 'R' %}
+    <p><small><span class="badge bg-secondary">Finalizado</span></small></p>
+    {% endif %}
+
+    {% if model.atendimento.situacao == 'C' %}
+    <p><small><span class="badge bg-danger">Cancelado</span></small></p>
+    {% endif %}
+
+
+    <!-- Formulário de anamnese para agendamento do atendimento -->
+
+    <div class="mt-4">
+        <h5 class="mt-4">Dados animal</h5>
+
+        <div class="row">
+            <div class="col-12">
+                {{ forms.textInput(name="nome", label="Nome", enabled=false, value=model.atendimento.animal.nome) }}
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-9 col-md-6">
+                {{ forms.textInput(name="raca", label="Raça", enabled=false, value=model.atendimento.animal.raca) }}
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                {{ forms.textInput(name="idade", label="Idade", enabled=false, value=(model.atendimento.animal.idade|string + ' ' + {'D': 'Dias', 'S': 'Semanas', 'M': 'Meses', 'A': 'Anos'}[model.atendimento.animal.idade_type]) ) }}
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="especie", label="Espécie", enabled=false, value={'GATO': 'Gato', 'CACHORRO': 'Cachorro', 'OUTRO': 'Outro'}[model.atendimento.animal.especie]) }}
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="sexo", label="Sexo", enabled=false, value={'M': 'Macho', 'F': 'Fêmea'}[model.atendimento.animal.sexo]) }}
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="cor_pelagem", label="Cor Pelagem", enabled=false, value=model.atendimento.animal.cor_pelagem) }}
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="procedencia", label="Procedência", enabled=false, value={'Criador': 'Criador', 'Abrigo': 'Abrigo', 'Resgate': 'Resgate', 'Compra': 'Compra'}[model.atendimento.animal.procedencia]) }}
+            </div>
+        </div>
+
+        {% if current_user.is_membro_equipe %}
+        <hr class="mt-4" />
+        <h5 class="mt-4">Responsável</h5>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="fname", label="Nome", enabled=false, value=model.atendimento.tutor.usuario.first_name) }}
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="lname", label="Sobrenome", enabled=false, value=model.atendimento.tutor.usuario.last_name) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name='rg', label='RG', enabled=false, value=model.atendimento.tutor.rg, mask='rg') }}
+            </div>
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name='cpf', label='CPF', enabled=false, value=model.atendimento.tutor.cpf, mask='cpf') }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="email", label="Email", enabled=False, value=model.atendimento.tutor.usuario.email ) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name='telefone1', label='Telefone 1', enabled=False, value=model.atendimento.tutor.contato.telefone1, mask='phone') }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name='telefone2', label='Telefone 2', enabled=False, value=model.atendimento.tutor.contato.telefone2, mask='phone') }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name='logradouro', label='Endereço', enabled=False, value=model.atendimento.tutor.contato.logradouro) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name='numero', label='Número', enabled=False, value=model.atendimento.tutor.contato.numero) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name='complemento', label='Complemento', enabled=False, value=model.atendimento.tutor.contato.complemento) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name='bairro', label='Bairo', enabled=False, value=model.atendimento.tutor.contato.bairro) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name='cidade', label='Cidade', enabled=False, value=model.atendimento.tutor.contato.cidade) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name='uf', label='UF', enabled=False, value=model.atendimento.tutor.contato.uf) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name='cep', label='CEP', enabled=False, value=model.atendimento.tutor.contato.cep) }}
+            </div>
+        </div>
+        {% endif %}
+
+        <hr class="mt-4" />
+
+        <h5 class="mt-4">Anamnese</h5>
+
+        <div class="row">
+            <div class="col-12">
+                {{ forms.textArea(name="queixa_principal", enabled=False, label="Descreva a queixa principal, estado geral, sintomas, histórico clínico e evolução", value=model.anamnese.get('queixa_principal'), required=true) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="apetite", label="Apetite", enabled=False, value=model.anamnese.get('apetite'), required=true) }}
+            </div>
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="disposicao", label="Disposicao", enabled=False, value=model.anamnese.get('disposicao'), required=true) }}
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="fezes", label="Fezes / Urina", enabled=False, value=model.anamnese.get('fezes'), required=true) }}
+            </div>
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="tratamentos", label="Tratamentos anteriores", enabled=False, value=model.anamnese.get('tratamentos'), required=true) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                {{ forms.radioInput(name="tosse", label="Tosse", enabled=False, value=model.anamnese.get('tosse'), options={'S': 'Sim', 'N': 'Não'}) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.radioInput(name="espirros", label="Espirros", enabled=False, value=model.anamnese.get('espirros'), options={'S': 'Sim', 'N': 'Não'}) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.radioInput(name="vomito", label="Vômito", enabled=False, value=model.anamnese.get('vomito'), options={'S': 'Sim', 'N': 'Não'}) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.radioInput(name="diarreia", label="Diarreia", enabled=False, value=model.anamnese.get('diarreia'), options={'S': 'Sim', 'N': 'Não'}) }}
+            </div>
+        </div>
+
+        <h5 class="mt-4">Histórico</h5>
+
+        <div class="row">
+            <div class="col-12">
+                {{ forms.textArea(name="historico", label="Doenças ou cirurgias anteriores", enabled=False, value=model.anamnese.get('historico'), required=true) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="reproducao", label="Vida reprodutiva", enabled=False, value=model.anamnese.get('reproducao'), required=true) }}
+            </div>
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="alimentação", label="Alimentação habitual", enabled=False, value=model.anamnese.get('alimentação'), required=true) }}
+            </div>
+        </div>
+
+        <h5 class="mt-4">Habitação</h5>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="habito", label="Tipo", required=true, enabled=False, value={'Domiciliado': 'Domiciliado', 'Semi-domiciliado':'Semi-domiciliado', 'Não-domiciliado': 'Não-domiciliado'}[model.anamnese.get('habito')]) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="habito_obs", label="Descrição", enabled=False, value=model.anamnese.get('habito_obs'), required=true) }}
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                {{ forms.radioInput(name="convivio", label="Convive com outros animais", enabled=False, required=true, value=model.anamnese.get('convivio'), options={'S': 'Sim', 'N': 'Não'}) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="convivio_qtd", label="Quantos?", required=true, enabled=False, value=model.anamnese.get('convivio_qtd'), mask='numeric') }}
+            </div>
+        </div>
+
+        <h5 class="mt-4">Vacinas</h5>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="polivalente", label="Vacina polivalente", enabled=False, value=model.anamnese.get('polivalente'), required=true) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="poli_ult_dose", label="Última dose", enabled=False, value=model.anamnese.get('poli_ult_dose'), required=true, mask='date') }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="antirabica", label="Vacina antirábica", enabled=False, value=model.anamnese.get('antirabica'), required=true) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="rabi_ult_dose", label="Última dose", enabled=False, value=model.anamnese.get('rabi_ult_dose'), required=true, mask='date') }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="vermifugacao", label="Vermifugação", enabled=False, value=model.anamnese.get('vermifugacao'), required=true) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name="vermif_ult_dose", label="Última dose", enabled=False, value=model.anamnese.get('vermif_ult_dose'), required=true, mask='date') }}
+            </div>
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="parasitas", label="Controle de ectoparasitas e vetores", enabled=False, value=model.anamnese.get('parasitas'), required=true) }}
+            </div>
+        </div>
+
+
+
+        <!-- Submit button -->
+
+        {% if current_user.is_membro_equipe and model.atendimento.situacao == 'S' %}
+
+        <div class="row mt-4 justify-content-end">
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agendamentoModal">
+                    <i class="fas fa-calendar-days me-1"></i> Confirmar agendamento
+                </button>
+            </div>
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+<!-- Agendamento Modal -->
+<div class="modal modal fade" id="agendamentoModal" tabindex="-1" aria-labelledby="docModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="agendamentoModal">Agendamento</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Informar a data para agendar este atendimento</p>
+                <form id="agendamentoForm" action="{{ url_for('routes.atendimentos.agendar') }}" method="post">
+                    <input type="hidden" name="atendimento_id" value="{{ model.atendimento.id }}">
+                    {{ forms.textInput(name="data_agendamento", label="Data agendamento", required=True, mask='datehourminute') }}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="agendamentoForm" class="btn btn-primary">Agendar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

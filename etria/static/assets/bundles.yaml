@@ -4,3 +4,17 @@ css-all:
     depends: assets/scss/*
     contents:
         - assets/scss/main.scss
+
+js-all:
+    filters: jsmin
+    output: js/scripts.gen.js
+    depends: assets/js/*
+    contents:
+        - assets/js/main.js
+        - assets/js/forms.js
+
+js-vendor:
+    output: js/vendor.gen.js
+    contents:
+        - assets/node_modules/inputmask/dist/jquery.inputmask.min.js
+        - assets/node_modules/inputmask/dist/bindings/inputmask.binding.js

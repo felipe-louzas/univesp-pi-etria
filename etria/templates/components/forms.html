@@ -1,17 +1,100 @@
-{% macro textInput(name, label, type="text", required = false, value='') -%}
+{% macro textInput(name, label, type="text", required = false, enabled = true, value='', class='', action_text='', action_link='', mask='', options=None, options_value=None) -%}
 <div class="form-group mt-2">
     <label for="{{ name }}_input" class="form-label">{{ label }}:</label>
-    
-    <input 
-        id="{{ name }}_input" 
-        type="{{ type }}" 
-        name="{{ name }}" 
-        class="form-control" 
-        {% if required %}
-        required="required"
+
+    <div class="input-group">
+        <input id="{{ name }}_input" type="{{ type }}" {% if enabled %}name="{{ name }}" {% endif %}
+               class="form-control {{ class }}" autocomplete="off" {% if required %}required="required" {% endif %}
+               autocomplete="no" value="{{ value or '' }}" {% if not enabled %}disabled="disabled" {% endif %} {% if mask
+            %}data-inputmask="'alias': '{{ mask }}'" {% endif %} />
+
+        {% if action_text %}
+        <a href="{{ action_link }}" class="btn btn-outline-secondary">{{ action_text }}</a>
         {% endif %}
-        autocomplete="no"
-        value="{{ value }}"
-    />
+
+        {% if options %}
+        <select id="{{ name }}_options_input" name="{{ name }}_options" class="form-select" autocomplete="off">
+            <option></option>
+            {% for key in options %}
+            <option value="{{ key }}" {% if key==options_value %}selected="selected" {% endif %}>{{ options[key] }}
+            </option>
+            {% endfor %}
+        </select>
+        {% endif %}
+
+    </div>
+
+
 </div>
+{%- endmacro %}
+
+{% macro selectInput(name, label, required=false, enabled=true, value='', options={}) -%}
+<div class="form-group mt-2">
+    <label for="{{ name }}_input" class="form-label">{{ label }}:</label>
+
+    <select id="{{ name }}_input" name="{{ name }}" class="form-select" autocomplete="off">
+        <option></option>
+        {% for key in options %}
+        <option value="{{ key }}" {% if key==value %}selected="selected" {% endif %}>{{ options[key] }}</option>
+        {% endfor %}
+    </select>
+</div>
+{%- endmacro %}
+
+
+{% macro textArea(name, label, required=false, enabled=true, rows=5, value='') -%}
+<div class="form-group mt-2">
+    <label for="{{ name }}_input" class="form-label">{{ label }}:</label>
+
+    <textarea id="{{ name }}_input" name="{{ name }}" class="form-control" rows="{{ rows }}" autocomplete="off"
+              {% if required %}required="required" {% endif %} autocomplete="no" {% if not enabled %}disabled="disabled"
+              {% endif %}>{{ value or ''}}</textarea>
+
+</div>
+{%- endmacro %}
+
+
+{% macro radioInput(name, label, required=false, enabled=true, value='', options={}) -%}
+<div class="form-group mt-2">
+    <label for="{{ name }}_input" class="form-label">{{ label }}:</label>
+
+    <div class="">
+        {% for key in options %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="{{ name }}" id="{{ name }}_{{ key }}" value="{{ key }}"
+                   autocomplete="off" {% if key==value %}checked {% endif %} {% if not enabled and key!=value %}disabled="disabled" 
+                   {% endif %}>
+            <label class="form-check-label" for="{{ name }}_{{ key }}">
+                {{ options[key] }}
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{%- endmacro %}
+
+{% macro imageUpload(name, label, required=false, enabled=true, document_id=None) -%}
+<div class="form-group mt-2">
+    <label for="{{ name }}_input" class="form-label">{{ label }}:</label>
+
+    <div class="card bg-light image-upload-control p-3">
+        <div class="mb-4 d-flex justify-content-center">
+            <div class="image-holder bg-secondary-subtle d-flex justify-content-center w-100" style="height: 200px">
+                {% if document_id %}
+                <img src="{{ url_for('routes.profile.doc_preview', doc_id=document_id) }}"
+                     class="img-fluid d-block m-auto" alt="upload de arquivo">
+                {% else %}
+                <img src="/static/img/upload-de-arquivo.png" class="img-fluid d-block m-auto opacity-25"
+                     alt="upload de arquivo">
+                {% endif %}
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <label class="btn btn-outline-secondary form-label" for="{{ name }}_input">Escolher arquivo</label>
+            <input id="{{ name }}_input" name="{{ name }}" type="file" class="form-control image-upload d-none" />
+        </div>
+    </div>
+</div>
+
 {%- endmacro %}

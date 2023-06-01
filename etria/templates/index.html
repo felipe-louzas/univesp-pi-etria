@@ -3,59 +3,66 @@
 {% block title %}Início{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 col-sm-12">
-            <h1>Bem-vindo ao ETRIA!</h1>
-            <p>A plataforma que vai revolucionar a forma como os veterinários realizam a triagem e anamnese de seus
-                pacientes. Com o ETRIA, você pode coletar e analisar dados sobre sintomas e possíveis diagnósticos de
-                seus pacientes, ajudando a construir, manter e aprimorar uma base de conhecimento sobre a saúde dos
-                animais.</p>
-            <p>Além disso, os tutores podem facilmente cadastrar seus animais de estimação e solicitar atendimento
-                online, tornando o processo mais rápido e conveniente.</p>
-            <a href="{{ url_for('routes.auth.cadastro') }}" class="btn btn-xl btn-primary">Cadastre-se agora</a>
+<div class="mt-4 mb-5">
+    <section class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-12 mb-3">
+                <h1 class="display-5">Bem-vindo ao ETRIA!</h1>
+                <p>A plataforma que vai revolucionar a forma como os veterinários realizam a triagem e anamnese de seus
+                    pacientes. Com o ETRIA, você pode coletar e analisar dados sobre sintomas e possíveis diagnósticos
+                    de
+                    seus pacientes, ajudando a construir, manter e aprimorar uma base de conhecimento sobre a saúde dos
+                    animais.</p>
+                <p>Além disso, os tutores podem facilmente cadastrar seus animais de estimação e solicitar atendimento
+                    online, tornando o processo mais rápido e conveniente.</p>
+                <a href="{{ url_for('routes.auth.cadastro') }}" class="btn btn-xl btn-primary">Cadastre-se agora</a>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <img src="/img/banner_home.jpg" alt="Banner Home" class="img-fluid w-100">
+            </div>
         </div>
-        <div class="col-md-6 col-sm-12">
-            <img src="/img/banner_home.jpg" alt="Banner Home" class="img-fluid">
+    </section>
+
+    <section class="benefits mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <h2 class="section-title">Benefícios para os tutores</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="benefit-box">
+                        <img src="/img/icon1.png" alt="Benefício 1">
+                        <h3 class="mt-2">Agendamento Online</h3>
+                        <p>Agende consultas com seus animais de estimação diretamente pela plataforma, sem precisar
+                            ligar ou
+                            ir até a clínica.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="benefit-box">
+                        <img src="/img/icon2.png" alt="Benefício 2">
+                        <h3 class="mt-2">Mais praticidade</h3>
+                        <p>Não precisa mais preencher fichas manualmente ou esperar na clínica para atendimento.
+                            Economize
+                            tempo e tenha mais praticidade na hora de cuidar da saúde do seu pet.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="benefit-box">
+                        <img src="/img/icon3.png" alt="Benefício 3">
+                        <h3 class="mt-2">Diagnóstico rápido</h3>
+                        <p>Com a plataforma ETRIA, você tem acesso a uma base de conhecimento com informações sobre
+                            sintomas
+                            e possíveis diagnósticos, o que ajuda o veterinário a chegar a um diagnóstico mais rápido e
+                            preciso.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
 </div>
 
-<section class="benefits mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <h2 class="section-title">Benefícios para os tutores</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="benefit-box">
-                    <img src="/img/icon1.png" alt="Benefício 1">
-                    <h3 class="mt-2">Agendamento Online</h3>
-                    <p>Agende consultas com seus animais de estimação diretamente pela plataforma, sem precisar ligar ou
-                        ir até a clínica.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="benefit-box">
-                    <img src="/img/icon2.png" alt="Benefício 2">
-                    <h3 class="mt-2">Mais praticidade</h3>
-                    <p>Não precisa mais preencher fichas manualmente ou esperar na clínica para atendimento. Economize
-                        tempo e tenha mais praticidade na hora de cuidar da saúde do seu pet.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="benefit-box">
-                    <img src="/img/icon3.png" alt="Benefício 3">
-                    <h3 class="mt-2">Diagnóstico rápido</h3>
-                    <p>Com a plataforma ETRIA, você tem acesso a uma base de conhecimento com informações sobre sintomas
-                        e possíveis diagnósticos, o que ajuda o veterinário a chegar a um diagnóstico mais rápido e
-                        preciso.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 {% endblock %}
-

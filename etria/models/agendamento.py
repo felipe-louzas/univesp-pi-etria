@@ -6,13 +6,17 @@ class Atendimentos(db.Model):
     tutor_id = db.Column(db.Integer, db.ForeignKey('tutores.id'))
     animal_id = db.Column(db.Integer, db.ForeignKey('animais.id'))
     atend_type = db.Column(db.String(1))  # C = Consulta, R = Retorno
-    situacao = db.Column(db.String(1))  # A = Agendado, R = Realizado, C = Cancelado
+    situacao = db.Column(db.String(1))  # S = Solicitado A = Agendado, R = Realizado, C = Cancelado
     data_solicitacao = db.Column(db.DateTime)
     data_agendamento = db.Column(db.DateTime)
     discente_id = db.Column(db.Integer, db.ForeignKey('membros_equipe.id'))
     vet_resp_id = db.Column(db.Integer, db.ForeignKey('membros_equipe.id'))
     retorno_ind = db.Column(db.Integer)  # 0 = Em caso de piora ou recidiva, ou numero de semanas
     retorno_atend_id = db.Column(db.Integer, db.ForeignKey('atendimentos.id'))
+    anamnese = db.Column(db.Text)
+
+    animal = db.relationship('Animais')
+    tutor = db.relationship('Tutores')
 
 
 class Anamneses(db.Model):

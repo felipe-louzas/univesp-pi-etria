@@ -1,0 +1,151 @@
+{% extends "base/base.html" %}
+
+{% import 'components/base.html' as ui %}
+{% import 'components/forms.html' as forms %}
+
+{% block title %}Meu cadastro{% endblock %}
+
+
+
+
+
+{% block content %}
+<div class="mt-4 mb-5">
+    {{ ui.flashed_messages() }}
+
+    <h3>Meu cadastro</h3>
+        
+    {% if model.user.is_tutor and model.tutor.atualizado_em %} 
+        {% if model.tutor.aprovado_em %}
+            <p><small><span class="badge bg-success">Aprovado em {{ model.tutor.aprovado_em.strftime('%d/%m/%Y') }}</span></small></p>
+        {% else %}
+            <p><small><span class="badge bg-warning text-dark">Aguardando aprovação</span></small></p>
+        {% endif %}
+    {% endif %}
+    
+    <form action="{{ url_for('routes.profile.perfil_post') }}" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="fname", label="Nome", required=true, value=model.user.first_name) }}
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="lname", label="Sobrenome", required=true, value=model.user.last_name) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="email", label="Email", enabled=False, value=model.user.email, action_text="Alterar Email", action_link=url_for('routes.auth.update_email') ) }}
+            </div>
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name="senha", label="Senha", type="password", enabled=False, value="**********", action_text="Alterar Senha", action_link=url_for('routes.auth.update_email') ) }}
+            </div>
+        </div>
+
+        {% if model.user.is_membro_equipe %}
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {% set options = ({'ADMIN': 'Administrador', 'VETERINARIO': 'Veterinário', 'ASSISTENTE': 'Assistente'}) %}
+                {{ forms.selectInput(name="cargo", label="Cargo", value=model.membro_equipe.cargo_type, options=options) }}
+            </div>
+            <div class="col-md-6 col-sm-12">
+                {{ forms.selectInput(name="curso", label="Curso", value=model.membro_equipe.curso_id, options=model.cursos) }}
+            </div>
+        </div>            
+        {% endif %}
+
+        {% if model.user.is_tutor %}
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name='rg', label='RG', value=model.tutor.rg, mask='rg') }}
+            </div>
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name='cpf', label='CPF', value=model.tutor.cpf, mask='cpf') }}
+            </div>
+        </div>            
+
+        <hr class="mt-4"/>
+
+        <h5 class="mt-4">Endereço</h5>
+
+        <div class="row">
+            <div class="col-lg-2 col-md-3 col-sm-4">
+                {{ forms.textInput(name='cep', label='CEP', value=model.contato.cep, mask='cep') }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name='logradouro', label='Endereço', value=model.contato.logradouro) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name='numero', label='Número', value=model.contato.numero) }}
+            </div>
+            <div class="col-md-3 col-sm-6">
+                {{ forms.textInput(name='complemento', label='Complemento', value=model.contato.complemento) }}
+            </div>
+        </div>            
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name='bairro', label='Bairo', value=model.contato.bairro) }}
+            </div>
+            <div class="col-md-4 col-sm-8">
+                {{ forms.textInput(name='cidade', label='Cidade', value=model.contato.cidade) }}
+            </div>
+            <div class="col-md-2 col-sm-4">
+                {{ forms.textInput(name='uf', label='UF', value=model.contato.uf) }}
+            </div>
+        </div>            
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name='telefone1', label='Telefone 1', value=model.contato.telefone1, mask='phone') }}
+            </div>
+            <div class="col-md-6 col-sm-12">
+                {{ forms.textInput(name='telefone2', label='Telefone 2', value=model.contato.telefone2, mask='phone') }}
+            </div>
+        </div>
+
+        <hr class="mt-4"/>
+
+        <h5 class="mt-4">Documentos</h5>
+
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                {{ forms.imageUpload(name='imageDocumento', label="Documento de identidade", document_id=model.tutor.identidade_doc_id) }}
+            </div>
+            <div class="col-md-4 col-sm-12">
+                {{ forms.imageUpload(name='imageCompEnd', label="Comprovante de endereço", document_id=model.tutor.comp_endereco_doc_id) }}
+            </div>
+            <div class="col-md-4 col-sm-12">
+                {{ forms.imageUpload(name='imageCompRenda', label="Comprovante de renda", document_id=model.tutor.comp_renda_doc_id) }}
+            </div>
+        </div>
+
+
+        <!--
+        identidade_doc_id = db.Column(db.Integer, db.ForeignKey('documentos.id'))
+        comp_endereco_doc_id = db.Column(db.Integer, db.ForeignKey('documentos.id'))
+        comp_renda_doc_id = db.Column(db.Integer, db.ForeignKey('documentos.id'))
+        
+        atualizado_em = db.Column(db.DateTime)
+        aprovado_em = db.Column(db.DateTime)
+        aprovado_por = db.Column(db.Integer, db.ForeignKey('membros_equipe.id'))
+        --> 
+
+
+        {% endif %}
+
+        <!-- Align right -->
+        <div class="row mt-4 justify-content-end">
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Salvar</button>
+            </div>
+        </div>
+        
+    </form>
+
+</div>
+{% endblock %}

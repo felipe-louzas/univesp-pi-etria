@@ -8,3 +8,5 @@ pyyaml>=6.0
 libsass>=0.22.0
 python-dotenv>=1.0.0
 PyJWT>=2.6.0 
+jsmin>=3.0.1
+Pillow>=9.5.0

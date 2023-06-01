@@ -5,6 +5,26 @@
 </li>
 {%- endmacro %}
 
+{% macro appNav() -%}
+    <ul class="navbar-nav flex-grow-1 fs-5">
+        {% if current_user.is_membro_equipe %}
+            {{ navItem('Tutores', 'tutores.home') }}
+        {% endif %}
+
+        {% if current_user.is_tutor %}
+            {{ navItem('Animais', 'animais.home') }}
+        {% endif %}
+        
+        {{ navItem('Atendimentos', 'atendimentos.home') }}
+    </ul>
+{%- endmacro %}
+
+{% macro mainNav() -%}
+    <ul class="navbar-nav flex-grow-1 fs-5">
+        {{ navItem('Início', 'index') }}
+    </ul>
+{%- endmacro %}
+
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container flex-nowrap">
         <!-- First Line -->
@@ -40,7 +60,10 @@
         {% endif %}
     </div>
 </nav>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary p-0 mb-4">
+
+<!-- Navigation -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary p-0">
     <div class="container">
         <div class="offcanvas offcanvas-end bg-primary" id="navbar" aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header text-light">
@@ -49,18 +72,21 @@
                     aria-label="Fechar"></button>
             </div>
             <div class="offcanvas-body p-0">
-                <ul class="navbar-nav flex-grow-1 fs-5">
-                    {% if current_user.is_authenticated %}
-
-                    {{ navItem('Animais', 'animais.home') }}
-                    {{ navItem('Atendimentos', 'atendimentos.home') }}
-
+                {% if current_user.is_authenticated %}
+                    {% if request.endpoint.startswith('routes.public.') or request.endpoint == 'routes.index' %}
+                        {{ mainNav() }}
+                        <ul class="navbar-nav fs-5">
+                            {{ navItem('Atendimentos »', 'atendimentos.home') }}
+                        </ul>
                     {% else %}
-
-                    {{ navItem('Início', 'index') }}
-                    
+                        {{ appNav() }}
+                        <ul class="navbar-nav fs-5">
+                            {{ navItem('Inicio »', 'index') }}
+                        </ul>
                     {% endif %}
-                </ul>
+                {% else %}
+                    {{ mainNav() }}
+                {% endif %}
             </div>
         </div>
     </div>

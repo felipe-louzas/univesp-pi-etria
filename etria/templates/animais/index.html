@@ -1,0 +1,63 @@
+{% extends "base/base.html" %}
+
+{% import 'components/base.html' as ui %}
+{% import 'components/forms.html' as forms %}
+
+{% block title %}Animais{% endblock %}
+
+{% block content %}
+<div class="mt-4 mb-5">
+    {{ ui.flashed_messages() }}
+
+    <h3>Animais</h3>
+
+    <!-- Actions -->
+    <div class="d-flex justify-content-end align-items-center mb-3">
+        <a href="{{ url_for('routes.animais.new') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>
+            Adicionar animal
+        </a>
+    </div>
+
+    <!-- Results table -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Idade</th>
+                    <th>Sexo</th>
+                    <th>Espécie</th>
+                    <th>Raça</th>
+                    <th>Pelagem</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for animal in model.animais %}
+                <tr>
+                    <td class="align-middle">{{ animal.nome }}</td>
+                    <td class="align-middle">{{ animal.idade }} {{ {'D': 'Dias', 'S': 'Semanas', 'M': 'Meses', 'A': 'Anos'}[animal.idade_type] }}</td>
+                    <td class="align-middle">{{ {'M': 'Macho', 'F': 'Fêmea'}[animal.sexo] }}</td>
+                    <td class="align-middle">{{ {'GATO': 'Gato', 'CACHORRO': 'Cachorro', 'OUTRO': 'Outro'}[animal.especie] }}</td>
+                    <td class="align-middle">{{ animal.raca }}</td>
+                    <td class="align-middle">{{ animal.cor_pelagem }}</td>
+                    <td>
+                        <a href="{{ url_for('routes.animais.edit', id=animal.id) }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit me-1"></i> 
+                            Editar</a>
+                        <a href="{{ url_for('routes.animais.delete', id=animal.id) }}"
+                           class="btn btn-sm btn-outline-danger">
+                           <i class="fas fa-trash me-1"></i>
+                           Excluir</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7">Nenhum animal cadastrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

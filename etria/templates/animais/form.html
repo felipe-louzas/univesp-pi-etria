@@ -1,0 +1,64 @@
+{% extends "base/base.html" %}
+
+{% import 'components/base.html' as ui %}
+{% import 'components/forms.html' as forms %}
+
+{% block title %}Adicionar animal{% endblock %}
+
+{% block content %}
+<div class="mt-4 mb-5">
+    {{ ui.flashed_messages() }}
+
+    <h3>Adicionar animal</h3>
+
+    <div class="mt-4">
+        <form action="{{ url_for('routes.animais.save') }}" method="POST" enctype="multipart/form-data">
+            
+            <input type="hidden" name="id" value="{{ model.animal.id }}">
+
+            <div class="row">
+                <div class="col-12">
+                    {{ forms.textInput(name="nome", label="Nome", required=true, value=model.animal.nome) }}
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-9 col-md-6">
+                    {{ forms.textInput(name="raca", label="Raça", required=true, value=model.animal.raca) }}
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    {{ forms.textInput(name="idade", label="Idade", required=true, value=model.animal.idade, mask='numeric', options={'D': 'Dias', 'S': 'Semanas', 'M': 'Meses', 'A': 'Anos'}, options_value=model.animal.idade_type) }}
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.selectInput(name="especie", label="Espécie", required=true, value=model.animal.especie, options={'GATO': 'Gato', 'CACHORRO': 'Cachorro', 'OUTRO': 'Outro'}) }}
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.selectInput(name="sexo", label="Sexo", required=true, value=model.animal.sexo, options={'M': 'Macho', 'F': 'Fêmea'}) }}
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.textInput(name="cor_pelagem", label="Cor Pelagem", required=true, value=model.animal.cor_pelagem) }}
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    {{ forms.selectInput(name="procedencia", label="Procedência", required=true, value=model.animal.procedencia, options={'Criador': 'Criador', 'Abrigo': 'Abrigo', 'Resgate': 'Resgate', 'Compra': 'Compra'}) }}
+                </div>
+            </div>
+
+
+            <div class="row mt-4 justify-content-end">
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

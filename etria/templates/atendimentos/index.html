@@ -1,3 +1,83 @@
 {% extends "base/base.html" %}
 
+{% import 'components/base.html' as ui %}
+{% import 'components/forms.html' as forms %}
+
 {% block title %}Atendimentos{% endblock %}
+
+{% block content %}
+<div class="mt-4 mb-5">
+    {{ ui.flashed_messages() }}
+
+    <h3>Atendimentos</h3>
+
+    <!-- Actions -->
+
+    <div class="d-flex justify-content-end align-items-center mb-3">
+        <a href="{{ url_for('routes.atendimentos.new') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            Novo atendimento
+        </a>
+    </div>
+
+    <!-- Results table -->
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    {% if current_user.is_membro_equipe %}<th>Tutor</th>{% endif %}
+                    <th>Animal</th>
+                    <th>Tipo</th>
+                    <th>Situação</th>
+                    <th>Data Solicitação</th>
+                    <th>Data Agendamento</th>
+                    <th>Opções</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for atendimento in model.atendimentos %}
+                <tr>
+                    {% if current_user.is_membro_equipe %}<td>{{ atendimento.tutor.contato.nome }}</td>{% endif %}
+                    <td class="align-middle">{{ atendimento.animal.nome }}</td>
+                    <td class="align-middle">{{ {'C': 'Consulta', 'R': 'Retorno'}[atendimento.atend_type] }}</td>
+                    <td class="align-middle">{{ {'S': 'Solicitado', 'A': 'Agendado', 'R': Finalizado, 'C': 'Cancelado'}[atendimento.situacao] }}
+                    </td>
+                    <td class="align-middle">{{ atendimento.data_solicitacao.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td class="align-middle">{{ atendimento.data_agendamento.strftime('%d/%m/%Y %H:%M') if atendimento.data_agendamento else '' }}
+                    </td>
+                    <td class="align-middle">
+                        {% if current_user.is_tutor and atendimento.situacao == 'S' %}
+                        <a href="{{ url_for('routes.atendimentos.edit', id=atendimento.id) }}" class="btn btn-sm btn-outline-secondary"><i
+                               class="fas fa-edit me-1"></i>
+                            Editar</a>
+
+                        {% else %}
+
+                        <a href="{{ url_for('routes.atendimentos.view', id=atendimento.id) }}" class="btn btn-sm btn-outline-secondary"><i
+                            class="fas fa-eye me-1"></i>
+                         Detalhes</a>
+
+                        {% endif %}
+
+                        {% if atendimento.situacao == 'S' or atendimento.situacao == 'A' %}
+                        <form action="{{ url_for('routes.atendimentos.cancel', id=atendimento.id) }}" method="post" class="d-inline">
+                            <button type="sumbit" class="btn btn-outline-danger btn-sm">
+                                <i class="fas fa-times"></i>
+                                Cancelar
+                            </button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">Nenhum atendimento cadastrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}

@@ -4,6 +4,8 @@ from .auth import routes as auth_routes
 from .atendimentos import routes as atendimentos_routes
 from .profile import routes as profile_routes
 from .animais import routes as animais_routes
+from .public import routes as public_routes
+from .tutores import routes as tutores_routes
 
 
 # Routes blueprint
@@ -12,10 +14,12 @@ from .animais import routes as animais_routes
 # It is imported by the etria package and registered on the Flask app instance in etria/__init__.py
 #
 routes = Blueprint('routes', __name__)
+routes.register_blueprint(public_routes)
 routes.register_blueprint(auth_routes)
 routes.register_blueprint(atendimentos_routes)
 routes.register_blueprint(profile_routes)
 routes.register_blueprint(animais_routes)
+routes.register_blueprint(tutores_routes)
 
 # 
 # Register base routes

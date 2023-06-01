@@ -19,3 +19,10 @@
 {% endwith %}
 
 {%- endmacro %}
+
+{% macro docLink(doc_id, icon, label='') -%}
+<button type="button" class="btn btn-outline-secondary btn-sm btn-doc-modal" {% if doc_id %} data-doc-url="{{ url_for('routes.profile.doc_view', doc_id=doc_id)  }}" {% endif %} data-bs-toggle="modal" data-bs-target="#docModal"
+        {% if not doc_id %}disabled{% endif %}>
+    <i class="fas fa-{{ icon }}"></i> {{ label }}
+</button>
+{%- endmacro %}

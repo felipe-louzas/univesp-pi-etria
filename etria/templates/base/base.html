@@ -7,10 +7,11 @@
     <title>{% block title %}{{ request.endpoint }}{% endblock %} | {{ SITE_TITLE }}</title>
 
     <!-- FontAwsome CSS -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
-        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- CSS Bundle -->
+        <!-- CSS Bundle -->
     {% assets "css-all" %}
     <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css">
     {% endassets %}
@@ -23,16 +24,16 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
         integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
-        integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
         crossorigin="anonymous"></script>
 
     {% block extra_head %}{% endblock %}
 </head>
 
-<body class="min-vh-100 d-flex flex-column">
+<body class="min-vh-100 d-flex flex-column bg-body-tertiary">
 
-    <header>
+    <header class="bg-body">
         {% block header %}{% include "base/header.html" %}{% endblock %}
     </header>
 
@@ -42,9 +43,18 @@
 
     {% block extra_body %}{% endblock %}
 
-    <footer class="footer bg-dark text-white mt-5">
+    <footer class="footer bg-dark text-white">
         {% block footer %}{% include "base/footer.html" %}{% endblock %}
     </footer>
+
+    {% assets "js-vendor" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {% assets "js-all" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
 
 </body>
 

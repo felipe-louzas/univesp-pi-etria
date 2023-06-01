@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from etria.models import User
+from etria.models import User, Tutores, Contatos
 from etria.database import database as db
 from etria.email import send_verification_email
 from etria.jwt import check_email_validation_token
@@ -138,9 +138,22 @@ def cadastro_post():
         password=generate_password_hash(password, method='sha256'),
         email_verified=False,
     )
-
-    # add the new user to the database
     db.session.add(new_user)
+
+    tutor_contato = Contatos(
+        nome=first_name + ' ' + last_name,
+        nome_resp=first_name + ' ' + last_name,
+        email=email,
+    )
+    db.session.add(tutor_contato)
+    db.session.flush()
+
+    tutor_cadastro = Tutores(
+        usuario_id=new_user.id,
+        contato_id=tutor_contato.id,
+    )
+    db.session.add(tutor_cadastro)
+
     db.session.commit()
 
     login_user(new_user)
